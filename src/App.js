@@ -1,19 +1,43 @@
-import React from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React, { Component } from 'react';
+import Nav from "./components/nav.js"
+import SearchBar from "./components/search-bar"
 
-import Navbar from "./components/navbar.js";
-import SearchResults from "./components/search-results.js";
+class App extends Component {
+  
+  constructor() {
+    super()
+    this.state = {
+      movies: [],
+      searchTerm: ""
+    }
+    this.apiKey = process.env.REACT_APP_API
+  }
 
+  handleSubmit = (e) => {
 
-function App() {
-  return (
-    <Router>
-      <div>
-        <Navbar />
-        <SearchResults />
+    fetch(`https://api.themoviedb.org/3/search/movie?api_key=${this.apiKey}&query=${this.state.searchTerm}`)
+
+    .then(data => data.json())
+    .then(data => {
+      console.log(data);
+      this.setState({ movies: [...data.results]})
+    })
+ 
+    e.preventDefault()
+  }
+
+  handleChange = (e) => {
+    this.setState({ searchTerm: e.target.value })
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <Nav />
+        <SearchBar handleSubmit={this.handleSubmit} handleChange={this.handleChange}/>
       </div>
-    </Router>
-  );
+    );
+  }
 }
 
 export default App;
