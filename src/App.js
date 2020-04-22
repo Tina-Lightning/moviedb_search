@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Nav from "./components/nav.js"
-import SearchBar from "./components/search-bar.js"
-import MovieList from "./components/movie-list.js"
-import Pagination from "./components/pagination.js"
-import MovieInfo from "./components/movie-info.js"
+import Nav from "./components/nav.js";
+import SearchBar from "./components/search-bar.js";
+import MovieList from "./components/movie-list.js";
+import Pagination from "./components/pagination.js";
+import MovieInfo from "./components/movie-info.js";
 
 
 class App extends Component {
@@ -47,11 +47,11 @@ class App extends Component {
   }
 
   viewMovieInfo = (id) => {
-    const filterMovie = this.state.movies.filter(movie => movie.id === id);
+    const filteredMovie = this.state.movies.filter(movie => movie.id === id);
 
     const newCurrentMovie = filteredMovie.length > 0 ? filteredMovie[0] : null; 
 
-    this.setState({ currentMovie: filteredMovie })
+    this.setState({ currentMovie: newCurrentMovie })
 
   }
 
@@ -66,9 +66,9 @@ class App extends Component {
       <div className="App">
         <Nav />
 
-        {this.state.currentMovie === null ? <div><SearchBar handleSubmit={this.handleSubmit} handleChange={this.handleChange}/><MovieList viewMovieInfo={this.viewMovieInfo} movies={this.state.movies} /></div> : <MovieInfo closeMovieInfo={this.closeMovieInfo} />}
+        {this.state.currentMovie === null ? <div><SearchBar handleSubmit={this.handleSubmit} handleChange={this.handleChange}/><MovieList viewMovieInfo={this.viewMovieInfo} movies={this.state.movies} /></div> : <MovieInfo currentMovie={this.state.currentMovie} closeMovieInfo={this.closeMovieInfo} />}
 
-        {this.state.totalResults > 20 ? <Pagination pages={numberPages} nextPage={this.nextPage} currentPage={this.state.currentPage} /> : "" }
+        {this.state.totalResults > 20 && this.state.currentMovie === null ? <Pagination pages={numberPages} nextPage={this.nextPage} currentPage={this.state.currentPage} /> : "" }
 
       </div>
     );
